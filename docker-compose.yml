@@ -1,0 +1,21 @@
+services:
+  pgvector:
+    image: pgvector/pgvector:pg16
+    container_name: codesense-pgvector
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: codesense_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d codesense_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgvector_data:
